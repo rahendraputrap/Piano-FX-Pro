@@ -679,15 +679,7 @@ void MainScreen::InitState() {
     m_bUpdateTrackColor = true;
     m_bUpdateNotePos = true;
 
-    m_bDumpFrames = cControl.bDumpFrames;
-    if (m_bDumpFrames) {
-        //Running ffmpeg
-        wchar_t buf[LONG_MAX_PATH] = {};
-        swprintf(buf, _countof(buf), L"cd /d \"%s\" && md \"%s\\PianoFX_Framedump\" & start cmd /k ffmpeg -r 60 -f rawvideo -s %dx%d -pix_fmt bgra -i async:\\\\.\\pipe\\PFXdump -c:v h264 -qp 19 -pix_fmt yuv420p \"%s\\PianoFX_Framedump\\Output.mp4\"", GetExePath().c_str(), GetExePath().c_str(), m_iScreenWidth, m_iScreenHeight, GetExePath().c_str());
-        m_hVideoPipe = CreateNamedPipe(TEXT("\\\\.\\pipe\\PFXdump"), PIPE_ACCESS_OUTBOUND, PIPE_TYPE_BYTE | PIPE_WAIT, PIPE_UNLIMITED_INSTANCES, static_cast<DWORD>(m_iScreenWidth * m_iScreenHeight * 4 * 120), 0, 0, nullptr);
-        _wsystem(buf);
-        ConnectNamedPipe(m_hVideoPipe, NULL);
-    }
+    m_bDumpFrames = false;
 
     InitKeyColor();
     AdvanceIterators(m_llStartTime, true);
@@ -741,7 +733,7 @@ GameState::GameError MainScreen::Init() {
         // get the screen's refresh rate
         DWM_TIMING_INFO timing_info;
         memset(&timing_info, 0, sizeof(timing_info));
-        timing_info.cbSize = sizeof(timing_info);
+        m_Timer.Init(m_bDumpFrames);
         if (FAILED(DwmGetCompositionTimingInfo(NULL, &timing_info))) {
             MessageBoxW(NULL, ErrorFPS, ErrorTitle, MB_OK | MB_ICONERROR);
             m_Timer.SetFrameRate(60);
@@ -993,6 +985,7 @@ GameState::GameError MainScreen::Logic() {
     static const VisualSettings& cVisual = config.GetVisualSettings();
     static const VideoSettings& cVideo = config.GetVideoSettings();
     static const ControlSettings& cControl = config.GetControlSettings();
+    static const ExportSettings& cExport = config.GetExportSettings();
 
     // people are probably going to yell at me if you can't change the bar color during playback
     m_csKBRed.SetColor(cVisual.iBarColor, 0.5f);
@@ -1161,7 +1154,7 @@ GameState::GameError MainScreen::Logic() {
             }
 
             if (IsNotNote(pEvent->GetChannelEventType())) {
-                if (pEvent->GetChannelEventType() == MIDIChannelEvent::ProgramChange && config.m_bPianoOverride) {
+                if (pEvent->GetChannelEventType() == MIDIChannelEvent::ProgramChange) {
                     key = NULL;
                     vel = NULL;
                 }
@@ -1560,7 +1553,7 @@ void MainScreen::JumpTo(mms_t llStartTime, bool loadingMode) {
             key_t key = pEvent->GetParam1();
             key_t vel = pEvent->GetParam2();
             if (IsNotNote(pEvent->GetChannelEventType())) {
-                if (pEvent->GetChannelEventType() == MIDIChannelEvent::ProgramChange && Config::GetConfig().m_bPianoOverride) {
+                if (pEvent->GetChannelEventType() == MIDIChannelEvent::ProgramChange) {
                     key = NULL;
                     vel = NULL;
                 }
@@ -1868,7 +1861,7 @@ GameState::GameError MainScreen::Render()
         CE_Responded = false;
     }
     // Dump frame!!!!
-    if (m_bDumpFrames && !cPlayback.GetPaused()) {
+    if (false && CE_Connected) {
         // Write to pipe
         HWND hGDI = FindWindowW(L"PFXGDI", NULL);
         if (CE_Connected && IsWindow(hGDI)) {

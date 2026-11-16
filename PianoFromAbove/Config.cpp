@@ -656,7 +656,8 @@ bool ExportSettings::SaveConfigValues(TiXmlElement* txRoot)
     txRoot->LinkEndChild(txExport);
     txExport->SetAttribute("DumpFrames", bDumpFrames ? "yes" : "no");
     txExport->SetAttribute("CaptureDesktop", bFullScreenCapture ? "yes" : "no");
-    txExport->SetAttribute("VideoFPS", static_cast<win32_t>(unsigned short(sFPS_100x)));
+    //txExport->SetAttribute("VideoFPS", static_cast<win32_t>(unsigned short(sFPS_100x)));
+    txExport->SetAttribute("VideoFPS", static_cast<win32_t>(static_cast<unsigned short>(sFPS_100x)));
     txExport->SetAttribute("DumpEvents", bDumpEvents ? "yes" : "no");
     txExport->SetAttribute("PreciseDump", bPreciseEventDump ? "yes" : "no");
     txExport->SetAttribute("UseSMPTE", bUseSMPTE ? "yes" : "no");

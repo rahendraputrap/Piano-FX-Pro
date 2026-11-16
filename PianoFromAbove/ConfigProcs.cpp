@@ -520,7 +520,9 @@ INT_PTR WINAPI ControlProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_INITDIALOG:
     {
         // Config to fill out the form
+        //const ControlSettings& cControl = Config::GetConfig().GetControlSettings();
         const ControlSettings& cControl = Config::GetConfig().GetControlSettings();
+        const ExportSettings& cExport = Config::GetConfig().GetExportSettings();
 
         // Edit boxes
         TCHAR buf[LONG_MAX_PATH];
@@ -533,7 +535,7 @@ INT_PTR WINAPI ControlProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         SetDlgItemTextW(hWnd, IDC_SPLASHMIDI, cControl.sSplashMIDI.c_str());
         _stprintf_s(buf, TEXT("%hhu"), cControl.iVelocityThreshold);
         SetDlgItemTextW(hWnd, IDC_VELSTRSHLD, buf);
-        CheckDlgButton(hWnd, IDC_FFMPEG, cControl.bDumpFrames);
+        CheckDlgButton(hWnd, IDC_FFMPEG, cExport.bDumpFrames);
 
         return TRUE;
     }
@@ -626,6 +628,7 @@ INT_PTR WINAPI ControlProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
             // Get a copy of the config to overwrite the settings
             Config& config = Config::GetConfig();
             ControlSettings& cControl = const_cast<ControlSettings&>(config.GetControlSettings());
+            ExportSettings& cExport = const_cast<ExportSettings&>(config.GetExportSettings());
 
             // Edit boxes
             TCHAR buf[LONG_MAX_PATH];
@@ -673,7 +676,7 @@ INT_PTR WINAPI ControlProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 return TRUE;
             }
 
-            cControl.bDumpFrames = IsDlgButtonChecked(hWnd, IDC_FFMPEG);
+            cExport.bDumpFrames = IsDlgButtonChecked(hWnd, IDC_FFMPEG);
 
             // Save settings
             config.SaveConfigValues();
@@ -697,7 +700,9 @@ INT_PTR WINAPI ExportProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_INITDIALOG:
     {
         // Config to fill out the form
+        //const ControlSettings& cControl = Config::GetConfig().GetControlSettings();
         const ControlSettings& cControl = Config::GetConfig().GetControlSettings();
+        const ExportSettings& cExport = Config::GetConfig().GetExportSettings();
 
         // Edit boxes
         TCHAR buf[LONG_MAX_PATH];
@@ -710,7 +715,7 @@ INT_PTR WINAPI ExportProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         SetDlgItemTextW(hWnd, IDC_SPLASHMIDI, cControl.sSplashMIDI.c_str());
         _stprintf_s(buf, TEXT("%hhu"), cControl.iVelocityThreshold);
         SetDlgItemTextW(hWnd, IDC_VELSTRSHLD, buf);
-        CheckDlgButton(hWnd, IDC_FFMPEG, cControl.bDumpFrames);
+        CheckDlgButton(hWnd, IDC_FFMPEG, cExport.bDumpFrames);
 
         return TRUE;
     }
@@ -803,6 +808,7 @@ INT_PTR WINAPI ExportProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
             // Get a copy of the config to overwrite the settings
             Config& config = Config::GetConfig();
             ControlSettings cControl = config.GetControlSettings();
+            ExportSettings cExport = config.GetExportSettings();
 
             // Edit boxes
             TCHAR buf[LONG_MAX_PATH];
@@ -850,7 +856,7 @@ INT_PTR WINAPI ExportProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 return TRUE;
             }
 
-            cControl.bDumpFrames = IsDlgButtonChecked(hWnd, IDC_FFMPEG);
+            cExport.bDumpFrames = IsDlgButtonChecked(hWnd, IDC_FFMPEG);
 
             // Report success and return
             config.SetControlSettings(cControl);

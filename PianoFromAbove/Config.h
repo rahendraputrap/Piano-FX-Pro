@@ -92,6 +92,9 @@ struct ControlSettings : public ISettings
     void LoadConfigValues(TiXmlElement* txRoot);
     bool SaveConfigValues(TiXmlElement* txRoot);
 
+    bool bDumpFrames = false;
+
+
     double dFwdBackSecs, dSpeedUpPct, dWheelMul;
     bool bAlwaysShowControls;
     bool bPhigros;
@@ -220,6 +223,9 @@ public:
     // Singleton
     static Config& GetConfig();
     static wstring GetFolder();
+
+    bool m_bPianoOverride = false;
+    bool m_bManualTimer = false;
 
     // Interface
     void LoadDefaultValues();

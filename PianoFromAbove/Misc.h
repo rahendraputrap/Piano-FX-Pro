@@ -105,6 +105,45 @@ inline wstring GetExePath(void) {
 // The Timer class
 //-----------------------------------------------------------------------------
 
+// The Timer class
+class Timer
+{
+public:
+    ~Timer();
+    void Init(bool manual);
+
+    void Start();
+    void Pause();
+    void Unpause();
+
+    double GetSecs();
+    mms_t GetMicroSecs();
+    mms_t GetTicks();
+    mms_t GetTicksPerSec() { return m_llTicksPerSec; }
+
+    bool IsStarted() { return m_bStarted; }
+    bool IsPaused() { return m_bPaused; }
+
+    void AddManualTime(mms_t time);
+    void SetFrameRate(mms_t rate);
+    void IncrementFrame();
+    bool m_bManualTimer;
+    double m_dFramerate;
+
+private:
+    mms_t GetRawTicks();
+    mms_t m_llStartTicks;
+    mms_t m_llTicksPerSec;
+
+    mms_t m_llManualTicks;
+    mms_t m_llManualTicksPerFrame;
+
+    mms_t m_llPausedTicks;
+
+    bool m_bStarted;
+    bool m_bPaused;
+};
+
 class DeltaPerformanceCounter {
     mms_t LastQuery = 0;
     mms_t ConstantDelta = 0;
