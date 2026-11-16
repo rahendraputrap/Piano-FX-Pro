@@ -364,7 +364,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <RemoteDebuggerDeployDebugCppRuntime>true</RemoteDebuggerDeployDebugCppRuntime>
-    <DebuggerFlavor>WindowsRemoteDebugger</DebuggerFlavor>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <RemoteDebuggerCommand>$(SystemDrive)\Piano-FX-Pro_Debug\$(TargetFileName)</RemoteDebuggerCommand>
     <RemoteDebuggerServerName>127.0.0.1:4024</RemoteDebuggerServerName>
     <DeploymentDirectory>$(SystemDrive)\Piano-FX-Pro_Debug</DeploymentDirectory>

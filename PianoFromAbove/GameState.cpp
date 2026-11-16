@@ -2605,7 +2605,8 @@ void MainScreen::RenderStatus(LPRECT prcStatus) {
     NoStats:
 
     HWND CMD = GetConsoleWindow();
-    if (IsWindowVisible(CMD) && !IsIconic(CMD) && (FrameCount & 0x0F) == 0) {
+    //if (IsWindowVisible(CMD) && !IsIconic(CMD) && (FrameCount & 0x0F) == 0) {
+    if (false && IsWindowVisible(CMD) && !IsIconic(CMD) && (FrameCount & 0x0F) == 0) {
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
         COORD pos;
         CONSOLE_SCREEN_BUFFER_INFO csbi;

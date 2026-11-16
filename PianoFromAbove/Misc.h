@@ -162,13 +162,13 @@ public:
 
 struct Util
 {
-    __forceinline static wstring Util::Utf8ToWstring(const string& u8str);
-    __forceinline static string Util::WstringToUtf8(const wstring& wstr);
-    __forceinline static color_t RandColor();
-    __forceinline static void RGBtoHSV(color_t R, color_t G, color_t B, color_t& H, color_t& S, color_t& V);
-    __forceinline static void HSVtoRGB(color_t H, color_t S, color_t V, color_t& R, color_t& G, color_t& B);
-    __forceinline static void EncodeHSLShift(signed short H, signed char S, signed char L, color_t* Packed);
-    __forceinline static void DecodeHSLShift(color_t Packed, signed short* H, signed char* S, signed char* L);
+    static wstring Util::Utf8ToWstring(const string& u8str);
+    static string Util::WstringToUtf8(const wstring& wstr);
+    static color_t RandColor();
+    static void RGBtoHSV(color_t R, color_t G, color_t B, color_t& H, color_t& S, color_t& V);
+    static void HSVtoRGB(color_t H, color_t S, color_t V, color_t& R, color_t& G, color_t& B);
+    static void EncodeHSLShift(signed short H, signed char S, signed char L, color_t* Packed);
+    static void DecodeHSLShift(color_t Packed, signed short* H, signed char* S, signed char* L);
 };
 
 //-----------------------------------------------------------------------------

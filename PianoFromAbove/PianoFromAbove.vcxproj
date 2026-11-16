@@ -4329,7 +4329,9 @@ mt.exe -manifest "..\Release\$(TargetName)_ManifestFixed.xml" -outputresource:".
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="MainProcs.cpp" />
     <ClCompile Include="MIDI.cpp" />
-    <ClCompile Include="Misc.cpp" />
+    <ClCompile Include="Misc.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="PianoFromAbove.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Studio.cpp" />

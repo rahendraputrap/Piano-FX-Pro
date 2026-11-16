@@ -17,6 +17,97 @@
 // The Timer class
 //-----------------------------------------------------------------------------
 
+Timer::~Timer()
+{
+}
+
+void Timer::Init(bool manual)
+{
+    LARGE_INTEGER Temp = {};
+    QueryPerformanceFrequency(&Temp);
+    m_llTicksPerSec = Temp.QuadPart;
+
+    m_bManualTimer = manual;
+    m_bStarted = false;
+    m_bPaused = false;
+    m_llStartTicks = 0;
+    m_llPausedTicks = 0;
+    m_llManualTicks = 0;
+    m_dFramerate = 60.0;
+    m_llManualTicksPerFrame = static_cast<mms_t>(m_llTicksPerSec / m_dFramerate);
+}
+
+void Timer::Start()
+{
+    m_bStarted = true;
+    m_bPaused = false;
+    m_llManualTicks = 0;
+    m_llStartTicks = GetRawTicks();
+}
+
+void Timer::Pause()
+{
+    if (m_bStarted && !m_bPaused)
+    {
+        m_bPaused = true;
+        m_llPausedTicks = GetRawTicks() - m_llStartTicks;
+    }
+}
+
+void Timer::Unpause()
+{
+    if (m_bStarted && m_bPaused)
+    {
+        m_bPaused = false;
+        m_llStartTicks = GetRawTicks() - m_llPausedTicks;
+        m_llPausedTicks = 0;
+    }
+}
+
+double Timer::GetSecs()
+{
+    return static_cast<double>(GetTicks()) / m_llTicksPerSec;
+}
+
+mms_t Timer::GetMicroSecs()
+{
+    return (GetTicks() * 1000000LL) / m_llTicksPerSec;
+}
+
+mms_t Timer::GetTicks()
+{
+    if (!m_bStarted) return 0;
+    if (m_bPaused) return m_llPausedTicks;
+    return GetRawTicks() - m_llStartTicks;
+}
+
+mms_t Timer::GetRawTicks()
+{
+    if (m_bManualTimer) return m_llManualTicks;
+    LARGE_INTEGER Temp = {};
+    QueryPerformanceCounter(&Temp);
+    return Temp.QuadPart;
+}
+
+void Timer::AddManualTime(mms_t time)
+{
+    m_llManualTicks += (time * m_llTicksPerSec) / 1000000LL;
+}
+
+void Timer::SetFrameRate(mms_t rate)
+{
+    if (rate > 0)
+    {
+        m_dFramerate = static_cast<double>(rate);
+        m_llManualTicksPerFrame = m_llTicksPerSec / rate;
+    }
+}
+
+void Timer::IncrementFrame()
+{
+    m_llManualTicks += m_llManualTicksPerFrame;
+}
+
 DeltaPerformanceCounter::DeltaPerformanceCounter() {
     LARGE_INTEGER Temp = {};
     QueryPerformanceFrequency(&Temp);

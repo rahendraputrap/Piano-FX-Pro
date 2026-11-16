@@ -1395,7 +1395,7 @@ bool MIDIOutDevice::Open(win32_t iDev)
     m_sDevice = GetDevName(iDev);
     m_bIsKDMAPI = false;
 
-    MMRESULT mmResult = midiOutOpen(&m_hMIDIOut, iDev, (DWORD_PTR)nullptr, (DWORD_PTR)this, CALLBACK_FUNCTION);
+    MMRESULT mmResult = midiOutOpen(&m_hMIDIOut, iDev, (DWORD_PTR)nullptr, (DWORD_PTR)this, CALLBACK_NULL);
     m_bIsOpen = (mmResult == MMSYSERR_NOERROR);
     return m_bIsOpen;
 }
